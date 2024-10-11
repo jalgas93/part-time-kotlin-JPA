@@ -4,6 +4,8 @@ import com.job.dto.CountryDto
 import com.job.entity.CountryEntity
 import com.job.repository.CountryRepository
 import com.job.service.CountryService
+import com.jobs.part_time.dto.CityDto
+import com.jobs.part_time.entity.CityEntity
 import com.jobs.part_time.exception.CountryNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
@@ -35,12 +37,8 @@ class CountryServiceImpl(
 
     override fun update(id: Int, countryDto: CountryDto) {
         val existingCountry = countryRepository.findByIdOrNull(id) ?: throw CountryNotFoundException(id)
-        existingCountry.owner = countryDto.owner
-        existingCountry.cardDate = countryDto.cardDate
-        existingCountry.cardType = countryDto.cardType
-        existingCountry.cardTitle = countryDto.cardTitle
-        existingCountry.cardDescription = countryDto.cardDescription
-        existingCountry.isVerified = countryDto.isVerified
+        existingCountry.name = countryDto.name
+        existingCountry.population = countryDto.population
 
         countryRepository.save(existingCountry)
     }
@@ -53,23 +51,24 @@ class CountryServiceImpl(
     private fun CountryEntity.toDto(): CountryDto {
         return CountryDto(
             id = this.id,
-            owner = this.owner,
-            cardTitle = this.cardTitle,
-            cardDescription = this.cardDescription,
-            cardDate = this.cardDate,
-            cardType = this.cardType,
-            isVerified = this.isVerified,
+            name = this.name,
+            population = this.population,
+            cities = emptyList(),
+           // cities = this.cities.map { it.toDto() }
         )
     }
+
+    private fun CityEntity.toDto(): CityDto =
+        CityDto(
+            name = this.name,
+        )
+
 
     private fun CountryDto.toEntity(): CountryEntity {
         return CountryEntity(
             id = 0,
-            owner = this.owner,
-            cardTitle = this.cardTitle,
-            cardDescription = this.cardDescription,
-            cardDate = this.cardDate,
-            cardType = this.cardType,
+            name = this.name,
+            population
         )
     }
 }
