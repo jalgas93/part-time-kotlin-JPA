@@ -1,0 +1,18 @@
+
+management:
+  server:
+    port: 8090
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    #url: jdbc:postgresql://localhost:5432/part_time_db
+    url: jdbc:postgresql://dpg-crpuq856l47c73aqdog0-a.singapore-postgres.render.com:5432/part_time_db?user=jobs&password=KjUsXBLxW0pyGHgBSQSS3IZ97916ilJQ
+    username: jobs
+    password: "KjUsXBLxW0pyGHgBSQSS3IZ97916ilJQ"
+  jpa:
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        show_sql: true
+        temp:
+          use_jdbc_metadata_defaults: false
