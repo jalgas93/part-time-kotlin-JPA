@@ -4,6 +4,7 @@ import com.job.dto.CountryDto
 import com.job.entity.CountryEntity
 import com.job.repository.CountryRepository
 import com.job.service.CountryService
+import com.jobs.part_time.exception.CountryNotFoundException
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.repository.findByIdOrNull
 import org.springframework.stereotype.Service
@@ -20,7 +21,7 @@ class CountryServiceImpl(
     }
 
     override fun findById(id: Int): CountryDto {
-        return countryRepository.findByIdOrNull(id)?.toDto() ?: throw RuntimeException("Not found")
+        return countryRepository.findByIdOrNull(id)?.toDto() ?: throw CountryNotFoundException(id)
     }
 
     override fun search(query: String): List<CountryDto> =
@@ -33,7 +34,7 @@ class CountryServiceImpl(
     }
 
     override fun update(id: Int, countryDto: CountryDto) {
-        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw RuntimeException("Not found")
+        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw CountryNotFoundException(id)
         existingCountry.owner = countryDto.owner
         existingCountry.cardDate = countryDto.cardDate
         existingCountry.cardType = countryDto.cardType
@@ -45,7 +46,7 @@ class CountryServiceImpl(
     }
 
     override fun delete(id: Int) {
-        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw RuntimeException("Not found")
+        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw CountryNotFoundException(id)
         countryRepository.deleteById(existingCountry.id)
     }
 
