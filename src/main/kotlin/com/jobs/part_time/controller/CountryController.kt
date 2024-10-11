@@ -2,11 +2,7 @@ package com.job.controller
 
 import com.job.dto.CountryDto
 import com.job.service.CountryService
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestParam
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/card")
@@ -25,4 +21,19 @@ class CountryController(
 
     @GetMapping("/search")
     fun search(@RequestParam("text") searchText: String): List<CountryDto> = countryService.search(searchText)
+
+    @PostMapping
+    fun create(@RequestBody dto: CountryDto): Int {
+     return countryService.create(dto)
+    }
+
+    @PutMapping("/{id}")
+    fun update(@PathVariable id: Int, @RequestBody dto: CountryDto) {
+     countryService.update(id, dto)
+    }
+
+    @DeleteMapping("/{id}")
+    fun delete(@PathVariable id: Int) {
+     countryService.delete(id)
+    }
 }

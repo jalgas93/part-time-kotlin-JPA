@@ -10,10 +10,10 @@ class CountryEntity(
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     val id: Int,
-    val owner: Int,
-    val cardTitle: String,
-    val cardDescription: String,
-    val cardDate: String,
-    val cardType: String,
-    val isVerified: Boolean = false,
+    var owner: Int,
+    var cardTitle: String,
+    var cardDescription: String,
+    var cardDate: String,
+    var cardType: String,
+    var isVerified: Boolean = false,
 )

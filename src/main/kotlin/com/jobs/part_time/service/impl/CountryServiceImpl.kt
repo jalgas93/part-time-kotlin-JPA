@@ -24,9 +24,30 @@ class CountryServiceImpl(
     }
 
     override fun search(query: String): List<CountryDto> =
-        countryRepository.findByNameStartsWithOrderByName(query).map {
+        countryRepository.findByNameStartsWithIgnoreCaseOrderByName(query).map {
             it.toDto()
         }
+
+    override fun create(countryDto: CountryDto): Int {
+        return countryRepository.save(countryDto.toEntity()).id
+    }
+
+    override fun update(id: Int, countryDto: CountryDto) {
+        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw RuntimeException("Not found")
+        existingCountry.owner = countryDto.owner
+        existingCountry.cardDate = countryDto.cardDate
+        existingCountry.cardType = countryDto.cardType
+        existingCountry.cardTitle = countryDto.cardTitle
+        existingCountry.cardDescription = countryDto.cardDescription
+        existingCountry.isVerified = countryDto.isVerified
+
+        countryRepository.save(existingCountry)
+    }
+
+    override fun delete(id: Int) {
+        val existingCountry = countryRepository.findByIdOrNull(id) ?: throw RuntimeException("Not found")
+        countryRepository.deleteById(existingCountry.id)
+    }
 
     private fun CountryEntity.toDto(): CountryDto {
         return CountryDto(
@@ -37,6 +58,17 @@ class CountryServiceImpl(
             cardDate = this.cardDate,
             cardType = this.cardType,
             isVerified = this.isVerified,
+        )
+    }
+
+    private fun CountryDto.toEntity(): CountryEntity {
+        return CountryEntity(
+            id = 0,
+            owner = this.owner,
+            cardTitle = this.cardTitle,
+            cardDescription = this.cardDescription,
+            cardDate = this.cardDate,
+            cardType = this.cardType,
         )
     }
 }
